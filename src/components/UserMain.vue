@@ -35,7 +35,7 @@
 
           </div>
         </div>
-        <el-button style="position: absolute; top: 190px; left: 200px "@click="newDialogVisible = true">Add Address</el-button>
+        <el-button style="position: absolute; top: 200px; left: 200px "@click="newDialogVisible = true">Add Address</el-button>
         <el-dialog title="add new address"
                    :visible.sync="newDialogVisible">
            <el-form :model="newAddress">
@@ -94,7 +94,9 @@
     <el-button type="primary" @click="updateAddress">submit</el-button>
   </span>
         </el-dialog>
+
         <div style="position: absolute; top: 250px; left: 190px; padding-left: 20px;background-color: white;">
+
           <el-table :data="User.addresses" style="width:100%" max-height="300">
             <el-table-column fixed prop="name" label="NAME" width="120"></el-table-column>
             <el-table-column fixed prop="phone" label="PHONE" width="150"></el-table-column>
@@ -105,7 +107,6 @@
             <el-table-column label="OPERATION" width="130">
               <template slot-scope="scope">
                 <el-button @click.native.prevent="updateRow(scope.$index,User.addresses)" type="text" size="small">EDIT</el-button>
-
                 <el-button @click.native.prevent="deleteRow(scope.$index,User.addresses)" type="text" size="small">DELETE</el-button>
               </template>
             </el-table-column>
