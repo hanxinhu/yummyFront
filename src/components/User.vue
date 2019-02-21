@@ -44,6 +44,7 @@
     data () {
 
       return {
+        _this : this,
         UserLogin:{
           email: '',
           password: ''
@@ -90,33 +91,41 @@
         this.$refs.UserLogin.validate((valid)=>{
 
           if(valid){
-            alert("commit")
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST', 'http://localhost:8088/user/logIn', true)
+            xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+            xmlhttp.onreadystatechange = function () {
+              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                console.log(xmlhttp.responseText.toString())
+                if(xmlhttp.responseText==="\"SUCCESS\""){
+                  this.goto("/user/main")
+                }else {
+                  alert(xmlhttp.responseText)
+                }
+
+              }
+            }.bind(this)
+            const user = {
+              password: this.UserLogin.password,
+              email: this.UserLogin.email,
+            };
+            localStorage.setItem("email",this.UserLogin.email)
+            console.log("add to local")
+            xmlhttp.send(JSON.stringify(user))
           }else {
-            alert("failed")
+            alert("please fill form first")
           }
 
         })
         console.log(this.UserLogin.email)
         console.log(this.UserLogin.password)
 
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('POST', 'http://localhost:8088/user/logIn', true)
-        xmlhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-        xmlhttp.onreadystatechange = function () {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            console.log(xmlhttp.responseText.toString())
-          }
-        }
-        var user = {
-          name: 'U',
-          password: '12121',
-          email: 'hanxinhu521@foxmail.com',
-          phone: '12123131',
-        }
 
-        xmlhttp.send(JSON.stringify(user))
 
       },
+      goto(path){
+        this.$router.push(path)
+  },
       register(){
         this.$refs.UserInfo.validate((valid)=>{
           if(valid){
@@ -127,18 +136,18 @@
               if (http.readyState === 4 && http.status===200){
                 if(http.responseText==="true"){
                   alert("Sign Up Success")
-                }else if(http.responseText==="false"){
+                }else{
                   alert("Sign Up False")
                 }
               }
             }
             http.open('POST',path,true)
             http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-            var email = this.UserInfo.email
-            var phone = this.UserInfo.phone
-            var password  =              this.UserInfo.password
-            var name = this.UserInfo.name;
-              let user = {
+            const email = this.UserInfo.email
+            const phone = this.UserInfo.phone
+            const password = this.UserInfo.password
+            const name = this.UserInfo.name
+            let user = {
               email: email,
               phone: phone,
              password:password,
@@ -150,6 +159,7 @@
           }
         })
       },
+
 
     }
 

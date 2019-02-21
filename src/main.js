@@ -11,7 +11,6 @@ import VueCropper from 'vue-cropper'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-Vue.use(ElementUI)
 Vue.use(HappyScroll)
 Vue.use(VueCropper)
 /* eslint-disable no-new */

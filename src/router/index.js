@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import user from '@/components/User'
-import restaurant from '@/components/Restaurant'
+import User from '@/components/User'
+import Restaurant from '@/components/Restaurant'
+import UserMain from '@/components/UserMain'
 Vue.use(Router)
 
 export default new Router({
@@ -15,12 +16,17 @@ export default new Router({
     {
       path: '/user',
       name: 'user',
-      component: user
+      component: User
     },
     {
       path:'/restaurant',
       name: 'restaurant',
-      component: restaurant
+      component: Restaurant
+    },
+    {
+      path:'/user/main',
+      name: 'UserMain',
+      component: UserMain
     }
   ]
 })
