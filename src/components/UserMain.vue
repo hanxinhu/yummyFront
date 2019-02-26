@@ -35,6 +35,26 @@
 
           </div>
         </div>
+        <el-dialog title="Update Profile" :visible.sync="profileDialogVisible">
+          <el-form :model="userInfo" ref="userInfo">
+            <el-form-item prop="name">
+              <el-input placeholder="New name"></el-input>
+            </el-form-item>
+            <el-form-item prop="phone">
+              <el-input placeholder="New phone"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input type="password" placeholder="New password"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <span>
+              <el-button  @click="profileDialogVisible = false">Cancel</el-button>
+              <el-button type="primary" @click="updateProfile">Submit</el-button>
+              </span>
+            </el-form-item>
+          </el-form>
+
+        </el-dialog>
         <el-button style="position: absolute; top: 200px; left: 200px "@click="newDialogVisible = true">Add Address</el-button>
         <el-dialog title="add new address"
                    :visible.sync="newDialogVisible">
@@ -149,12 +169,18 @@
           name: '',
           password: '',
           email: '',
+          phone:'',
           addresses: [
           ],
           state: '',
           level: '',
           balance: '',
           score: '',
+        },
+        userInfo:{
+          name:'',
+          password:'',
+          phone:'',
         },
         address: {
           phone: '',
@@ -185,10 +211,25 @@
         labelWidth: '80px'
         ,
         modifyIndex: '',
-
+        profileDialogVisible:false,
       }
     },
     methods: {
+      updateProfile(){
+        this.$refs.userInfo.validate((valid)=>{
+          if(valid){
+            this.profileDialogVisible = false;
+            this.User.name =this.userInfo.name;
+            this.User.password = this.userInfo.password;
+            this.User.phone = this.userInfo.phone;
+            this.updateUser()
+          }else {
+            alert("Please fill the form correctly first")
+          }
+        })
+      }
+
+      ,
       handleChange (value) {
 
       },
@@ -228,7 +269,7 @@
           let user = this.User;
           let path = App.path() + '/user/update';
           let http = new XMLHttpRequest()
-          http.open('POST',path,true);
+
           http.open('POST',path,true);
           http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
           http.send(JSON.stringify(user))

@@ -8,9 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import HappyScroll from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
 import VueCropper from 'vue-cropper'
+import locale from 'element-ui/lib/locale/lang/en'
+
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+Vue.use(ElementUI,{locale})
 Vue.use(HappyScroll)
 Vue.use(VueCropper)
 /* eslint-disable no-new */

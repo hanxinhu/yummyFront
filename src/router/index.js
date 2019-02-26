@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import User from '@/components/User'
 import Restaurant from '@/components/Restaurant'
 import UserMain from '@/components/UserMain'
+import RestMain from '@/components/RestMain'
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +28,11 @@ export default new Router({
       path:'/user/main',
       name: 'UserMain',
       component: UserMain
-    }
+    },
+    {
+      path:'/restaurant/main',
+      name: 'RestMain',
+      component:RestMain
+    },
   ]
 })

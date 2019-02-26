@@ -90,7 +90,27 @@
       }
     },
     methods:{
+      signUp(){
+        let _this = this
+        this.$ref.info.validate((valid)=>{
+          if (valid){
 
+          }else{
+            alert("please fill the form first")
+          }
+        })
+      },
+      logIn(){
+        let _this = this
+        this.$ref.simpleInfo.validate((valid)=>{
+          if (valid){
+
+
+          }else{
+            alert("please fill the form first")
+          }
+        })
+      }
     }
   }
 </script>
