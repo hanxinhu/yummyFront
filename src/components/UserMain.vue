@@ -115,6 +115,7 @@
   </span>
         </el-dialog>
 
+
         <div style="position: absolute; top: 250px; left: 190px; padding-left: 20px;background-color: white;">
 
           <el-table :data="User.addresses" style="width:100%" max-height="300">
@@ -132,6 +133,8 @@
             </el-table-column>
           </el-table>
         </div>
+
+        <el-button type="primary" style="position: absolute; top: 700px; left: 50%;" > Start Order</el-button>
       </div>
     </div>
 
