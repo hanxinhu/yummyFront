@@ -9,6 +9,8 @@ import SelectRestaurant from '@/components/SelectRestaurant'
 import SelectDish from '@/components/SelectDish'
 import OrderGenerate from '@/components/OrderGenerate'
 import MyOrders from '@/components/MyOrders'
+import AdminLogin from '@/components/AdminLogin'
+import Admin from '@/components/Admin'
 Vue.use(Router)
 
 export default new Router({
@@ -54,9 +56,19 @@ export default new Router({
       component : OrderGenerate
     },
     {
-      path:'user/myOrders',
+      path:'/user/myOrders',
       name: 'MyOrders',
       component: MyOrders
-    }
+    },
+    {
+      path:'/admin',
+      name:'AdminLogin',
+      component: AdminLogin
+    },
+    {
+      path :'/adminMain',
+      name: 'Admin',
+      component:Admin
+    },
   ]
 })
