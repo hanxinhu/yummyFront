@@ -34,6 +34,8 @@
             </template>
           </el-table-column>
         </el-table>
+        <p><br>
+        <br></p>
         <div>
           <el-table :data="settlements" border style="width: 100%">
             <el-table-column label="restaurant" prop="rid"></el-table-column>
