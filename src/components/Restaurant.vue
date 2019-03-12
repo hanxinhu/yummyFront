@@ -136,11 +136,13 @@
             let path = App.path() + '/restaurant/logIn?id=' + ID + '&password=' + password
             http.open('GET', path, true)
             http.send(null)
+            let _this = this
             http.onreadystatechange = function () {
               if (http.readyState === 4 && http.status === 200) {
                 let result = JSON.parse(http.responseText)
                 if (result === 'SUCCESS') {
-                  this.$router.push('/restaurant/main')
+                  localStorage.setItem('id',ID);
+                  _this.$router.push('/restaurant/main')
                 }
                 alert(result)
               }

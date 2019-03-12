@@ -16,7 +16,7 @@
               Type ：<span style="font-size: 16px;color: #767676">{{rest.type}}</span>
             </div>
             <div style="position: absolute; left: 935px; top: 70px">
-              ID ：<span style="font-size: 16px;color: #767676">{{rest.rid}}</span>
+              ID ：<span style="font-size: 16px;color: #767676">{{rest.id}}</span>
             </div>
             <div style="position: absolute; left: 35px; top: 120px">
               Description ：<span style="font-size: 16px;color: #767676">{{rest.description}}</span>
@@ -26,39 +26,50 @@
                 {{rest.street}}
               </span>
             </div>
-            <div><el-button type="primary">Edit Profile</el-button></div>
+            <div>
+              <el-button type="primary" :disabled='rest.updating' @click="updateProfileDialog = true">Edit Profile
+              </el-button>
+              <el-button v-show=updating type="text">your update is waiting</el-button>
+            </div>
           </div>
-          <el-dialog title="Update Profile" visible.snyc="">
+
+
+          <el-dialog title="Update Profile" :visible.snyc="updateProfileDialog">
             <el-form :model="newRest" ref="newRest">
               <el-form-item prop="name">
-                <el-input placeholder="New name"></el-input>
+                <el-input placeholder="New name" v-model="newRest.name"></el-input>
+              </el-form-item>
+              <el-form-item prop="description">
+                <el-input v-model="newRest.description" placeholder="description"></el-input>
               </el-form-item>
               <el-form-item prop="type">
-                <el-select v-model="type" placeholder="Select type">
-                  <el-option
-                    v-for="item in typeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+                <el-input v-model="newRest.type" placeholder="type">
+                </el-input>
               </el-form-item>
               <el-form-item>
                 <div id="app">
-                <el-cascader
-                  size="large"
-                  :options="options"
-                  v-model="selectedOptions"
-                 >
-                </el-cascader>
+                  <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="selectedOptions"
+                  >
+                  </el-cascader>
                 </div>
               </el-form-item>
+              <el-form-item prop="street">
+                <el-input v-model="newRest.street" placeholder="street"></el-input>
+              </el-form-item>
+              <el-button @click="updateProfileDialog = false" type="text">Cancel</el-button>
+              <el-button @click="newInfoUpdate" type="text"> Submit</el-button>
             </el-form>
           </el-dialog>
-          <div style="position: absolute; top: 200px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 500px">
-            Dishes<br>
-            <el-button type="primary">Add Dish</el-button>
-            <el-table :data="rest.dishes" border="true" style="width: 100%">
+
+          <div
+            style="position: absolute; top: 200px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 500px">
+            Dishes
+            <el-button type="primary" @click="newDishDialog = true">Add Dish</el-button>
+            <el-button type="primary">Add Combo</el-button>
+            <el-table :data="rest.dishes" border style="width: 100%">
               <el-table-column prop="id" label="ID" width="100">
               </el-table-column>
               <el-table-column prop="name" label="Name" width="100">
@@ -69,7 +80,6 @@
               </el-table-column>
               <el-table-column prop="number" label="Number" width="100">
               </el-table-column>
-              <el-table-column prop="type" label="Type"></el-table-column>
               <el-table-column prop="start" label="Start">
               </el-table-column>
               <el-table-column prop="end" label="End">
@@ -81,73 +91,83 @@
                     type="text"
                     size="small">
                     DELETE
-                  </el-button>
-                  <el-button
-                    @click.native.prevent=""
-                    type="text"
-                    size="small">
-                    EDIT
                   </el-button>
                 </template>
               </el-table-column>
             </el-table>
           </div>
-          <div style="position: absolute; top: 700px ;left:50%;margin-left: -550px;">
-            <p>Combos</p>
-            <el-table :data="rest.combos" border="true" style="width: 100%" >
-              <el-table-column prop="id" label="ID" width="100">
-              </el-table-column>
-              <el-table-column prop="name" label="Name" width="100">
-              </el-table-column>
-              <el-table-column prop="description" label="Description" width="400">
-              </el-table-column>
-              <el-table-column prop="price" label="Price"></el-table-column>
-              <el-table-column prop="number" label="Number">
-              </el-table-column>
-              <el-table-column prop="type" label="Type"></el-table-column>
-              <el-table-column prop="start" label="Start">
-              </el-table-column>
-              <el-table-column prop="end" label="End">
-              </el-table-column>
-              <el-table-column label="Operation" width="170">
-                <template slot-scope="scope">
-                  <el-button
-                    @click.native.prevent=""
-                    type="text"
-                    size="small">
-                    DELETE
-                  </el-button>
-                  <el-button
-                    @click.native.prevent=""
-                    type="text"
-                    size="small">
-                    EDIT
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+          <el-dialog title="New Dish" :visible.snyc="newDishDialog">
+            <el-form :model="newDish">
+              <el-form-item label="Name">
+                <el-input v-model="newDish.name"></el-input>
+              </el-form-item>
+              <el-form-item label="Description">
+                <el-input v-model="newDish.description">
+                </el-input>
+              </el-form-item>
+              <el-form-item label="number">
+                <el-input-number v-model="newDish.number" :min="0"></el-input-number>
+              </el-form-item>
+              <el-form-item label="price">
+                <el-input-number v-model="newDish.price" :precision="2" :min="0"></el-input-number>
+              </el-form-item>
+              <el-form-item label="StartTime">
+                <el-date-picker
+                  value-format="yyyy-MM-dd"
+                  v-model="start"
+                  type="date"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="EndTime">
+                <el-date-picker
+                  value-format="yyyy-MM-dd"
+                  v-model="end"
+                  type="date"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-form>
+            <el-button type="text" @click="newDishDialog = false">Cancel</el-button>
+            <el-button type="text" @click="addNewDish">Submit</el-button>
+          </el-dialog>
 
-          </div>
         </div>
-
-
       </div>
     </div>
   </el-main>
 </template>
 
 <script>
-  import App from '../App.vue'
+  import app from '../App.vue'
   import {provinceAndCityData, regionData, provinceAndCityDataPlus, regionDataPlus, CodeToText, TextToCode}
     from 'element-china-area-data'
+
   export default {
 
     name: 'RestMain',
 
+    computed: {
+      province: function () {
+        return CodeToText[this.selectedOptions[0]]
+      },
+      city: function () {
+        return CodeToText[this.selectedOptions[1]]
+      },
+      district: function () {
+        return CodeToText[this.selectedOptions[2]]
+      },
+      updating: function () {
+        return this.rest.updating
+      }
+    },
+    created () {
+      this.getRest()
+    },
     data () {
       return {
         rest: {
-          rid:'',
+          id: '',
           name: '',
           email: '',
           type: '',
@@ -156,21 +176,96 @@
           city: '',
           district: '',
           street: '',
-          dishes:[],
+          dishes: [],
+          updating: false,
         },
-        newRest:{
-          name:'',
-          description:'',
-          province:'',
-          city:'',
-          district:'',
-          street:'',
+        newRest: {
+          name: '',
+          type: '',
+          description: '',
+          province: '',
+          city: '',
+          district: '',
+          street: '',
         },
-        updateProfileDialog : false,
-        type:'',
+        newDish: {
+          name: '',
+          description: '',
+          price: '',
+          start: '',
+          end: '',
+          number: '',
+        }
+
+        ,
+        updateProfileDialog: false,
+        newDishDialog: false,
+        type: '',
         options: regionData,
         selectedOptions: [],
+        start: '',
+        end:'',
       }
+    },
+    methods: {
+      getRest () {
+        let id = localStorage.getItem('id')
+        let http = new XMLHttpRequest()
+        let path = app.path() + '/restaurant/findByID?ID=' + id
+        http.open('GET', path, true)
+        http.send(null)
+        let _this = this
+        http.onreadystatechange = function () {
+          if (http.status === 200 && http.readyState === 4) {
+            _this.rest = JSON.parse(http.responseText)
+          }
+        }
+      },
+      newInfoUpdate () {
+        this.updateProfileDialog = false
+        this.rest.updating = true
+        let http = new XMLHttpRequest()
+        let path = app.path() + '/infoUpdate/new'
+        http.open('POST', path)
+        http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        let id = localStorage.getItem('id')
+        console.log(id)
+        let infoUpdate = {
+          rid: id,
+          nameBefore: this.rest.name,
+          nameAfter: this.newRest.name,
+          typeBefore: this.rest.type,
+          typeAfter: this.newRest.type,
+          descriptionBefore: this.rest.description,
+          descriptionAfter: this.newRest.description,
+          provinceBefore: this.rest.province,
+          provinceAfter: this.province,
+          cityBefore: this.rest.city,
+          cityAfter: this.city,
+          districtBefore: this.rest.district,
+          districtAfter: this.district,
+          streetBefore: this.rest.street,
+          streetAfter: this.newRest.street,
+        }
+        http.send(JSON.stringify(infoUpdate))
+      },
+      addNewDish () {
+        this.newDish.start = this.start
+        this.newDish.end = this.end
+        this.rest.dishes.push(this.newDish)
+        this.newDishDialog = false
+        let restaurant = this.rest
+        let http = new XMLHttpRequest()
+        let path = app.path() + '/restaurant/update'
+        http.open('POST', path)
+        http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        http.send(JSON.stringify(restaurant))
+        http.onreadystatechange = function () {
+          if (http.status === 200 && http.readyState === 4) {
+            alert('success')
+          }
+        }
+      },
     }
   }
 
