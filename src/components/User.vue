@@ -110,7 +110,6 @@
               email: this.UserLogin.email,
             };
             localStorage.setItem("email",this.UserLogin.email)
-            console.log("add to local")
             xmlhttp.send(JSON.stringify(user))
           }else {
             alert("please fill form first")

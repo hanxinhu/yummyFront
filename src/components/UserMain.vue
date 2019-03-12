@@ -2,7 +2,8 @@
   <el-main>
     <div>
       <div style="position: absolute; top: 10px;width: 100%; left: 0;">
-        <div style="position: absolute; top: 20px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 700px">
+        <div
+          style="position: absolute; top: 20px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 700px">
           <div id="account_info" style="width: 100%; height: 171px; position: absolute; left: 0px; top: 0px;">
             <span style="font-size: 18px;position: absolute;left: 30px; top: 20px;">User Profile</span>
             <div style="position: absolute; left: 35px; top: 70px">
@@ -24,15 +25,15 @@
             <div style="position: absolute;left:400px;top:150px">
               LEVEL: <span style="font-size: 16px;color: #767676">{{User.level}}</span>
             </div>
-            <div style="position: absolute;left: 800px;top: 70px" >
+            <div style="position: absolute;left: 800px;top: 70px">
               BALANCE: <span style="font-size: 16px ;color: #767676">{{User.balance}} </span>
             </div>
             <div
               style="width: 94%;height: 1px;background-color: #dadada;left: 3%; top: 170px;position: absolute;"></div>
             <el-button id="edit_name" style="position: absolute; top: 30px; right: 50px" icon="el-icon-edit-outline"
-                       type="text" >Edit Profile
+                       type="text" @click="profileDialogVisible = true">Edit Profile
             </el-button>
-
+            <el-button style="position: absolute; top: 130px; right: 50px;" type="danger" @click="cancelUser">Cancel User</el-button>
           </div>
         </div>
         <el-dialog title="Update Profile" :visible.sync="profileDialogVisible">
@@ -48,38 +49,39 @@
             </el-form-item>
             <el-form-item>
               <span>
-              <el-button  @click="profileDialogVisible = false">Cancel</el-button>
+              <el-button @click="profileDialogVisible = false">Cancel</el-button>
               <el-button type="primary" @click="updateProfile">Submit</el-button>
               </span>
             </el-form-item>
           </el-form>
 
         </el-dialog>
-        <el-button style="position: absolute; top: 200px; left: 200px "@click="newDialogVisible = true">Add Address</el-button>
+        <el-button style="position: absolute; top: 200px; left: 200px " @click="newDialogVisible = true">Add Address
+        </el-button>
         <el-dialog title="add new address"
                    :visible.sync="newDialogVisible">
-           <el-form :model="newAddress">
-             <el-form-item prop="name" >
-               <el-input v-model="newAddress.name" placeholder="NAME"></el-input>
-             </el-form-item >
-             <el-form-item prop="phone" >
-               <el-input placeholder="PHONE"  v-model="newAddress.phone"></el-input>
-             </el-form-item >
-             <template>
-               <div id="app">
-                 <el-cascader
-                   size="large"
-                   :options="options"
-                   v-model="selectedOptions"
-                   @change="handleChange">
-                 </el-cascader>
-               </div>
-             </template>
-             <el-form-item prop="street" >
-               <el-input placeholder="STREET"  v-model="newAddress.street"></el-input>
-             </el-form-item >
-           </el-form>
-           <span slot="footer" class="dialog-footer">
+          <el-form :model="newAddress">
+            <el-form-item prop="name">
+              <el-input v-model="newAddress.name" placeholder="NAME"></el-input>
+            </el-form-item>
+            <el-form-item prop="phone">
+              <el-input placeholder="PHONE" v-model="newAddress.phone"></el-input>
+            </el-form-item>
+            <template>
+              <div id="app">
+                <el-cascader
+                  size="large"
+                  :options="options"
+                  v-model="selectedOptions"
+                  @change="handleChange">
+                </el-cascader>
+              </div>
+            </template>
+            <el-form-item prop="street">
+              <el-input placeholder="STREET" v-model="newAddress.street"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
     <el-button @click="newDialogVisible = false">cancel</el-button>
     <el-button type="primary" @click="addRow">submit</el-button>
   </span>
@@ -89,12 +91,12 @@
         <el-dialog title="modify address"
                    :visible.sync="modifyDialogVisible">
           <el-form :model="modifyAddress">
-            <el-form-item prop="name"  >
+            <el-form-item prop="name">
               <el-input v-model="modifyAddress.name" placeholder="NAME"></el-input>
-            </el-form-item >
-            <el-form-item prop="phone" >
-              <el-input placeholder="PHONE"  v-model="modifyAddress.phone"></el-input>
-            </el-form-item >
+            </el-form-item>
+            <el-form-item prop="phone">
+              <el-input placeholder="PHONE" v-model="modifyAddress.phone"></el-input>
+            </el-form-item>
             <template>
               <div>
                 <el-cascader
@@ -106,8 +108,8 @@
               </div>
             </template>
             <el-form-item prop="street">
-              <el-input placeholder="STREET"  v-model="modifyAddress.street"></el-input>
-            </el-form-item >
+              <el-input placeholder="STREET" v-model="modifyAddress.street"></el-input>
+            </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
     <el-button @click="modifyDialogVisible = false">cancel</el-button>
@@ -127,14 +129,18 @@
             <el-table-column fixed prop="street" label="STREET" width="300"></el-table-column>
             <el-table-column label="OPERATION" width="130">
               <template slot-scope="scope">
-                <el-button @click.native.prevent="updateRow(scope.$index,User.addresses)" type="text" size="small">EDIT</el-button>
-                <el-button @click.native.prevent="deleteRow(scope.$index,User.addresses)" type="text" size="small">DELETE</el-button>
+                <el-button @click.native.prevent="updateRow(scope.$index,User.addresses)" type="text" size="small">
+                  EDIT
+                </el-button>
+                <el-button @click.native.prevent="deleteRow(scope.$index,User.addresses)" type="text" size="small">
+                  DELETE
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
 
-        <el-button type="primary" style="position: absolute; top: 700px; left: 50%;" > Start Order</el-button>
+        <el-button type="primary" style="position: absolute; top: 700px; left: 50%;"> Start Order</el-button>
       </div>
     </div>
 
@@ -150,10 +156,10 @@
 
     name: 'UserMain',
     created () {
-     this.getUser();
+      this.getUser()
     },
-    computed :{
-      province : function () {
+    computed: {
+      province: function () {
         return CodeToText[this.selectedOptions[0]]
       },
       city: function () {
@@ -172,40 +178,39 @@
           name: '',
           password: '',
           email: '',
-          phone:'',
-          addresses: [
-          ],
+          phone: '',
+          addresses: [],
           state: '',
           level: '',
           balance: '',
           score: '',
         },
-        userInfo:{
-          name:'',
-          password:'',
-          phone:'',
+        userInfo: {
+          name: '',
+          password: '',
+          phone: '',
         },
         address: {
           phone: '',
           name: '',
-          province:'',
-          city:'',
-          district:'',
+          province: '',
+          city: '',
+          district: '',
           street: '',
         },
-        newAddress:{
+        newAddress: {
           phone: '',
           name: '',
           street: '',
         },
-        newDialogVisible :false,
-        modifyDialogVisible:false,
-        modifyAddress:{
+        newDialogVisible: false,
+        modifyDialogVisible: false,
+        modifyAddress: {
           phone: '',
           name: '',
-          province:'',
-          city:'',
-          district:'',
+          province: '',
+          city: '',
+          district: '',
           street: '',
         },
         options: regionData,
@@ -214,100 +219,112 @@
         labelWidth: '80px'
         ,
         modifyIndex: '',
-        profileDialogVisible:false,
+        profileDialogVisible: false,
       }
     },
     methods: {
-      updateProfile(){
-        this.$refs.userInfo.validate((valid)=>{
-          if(valid){
-            this.profileDialogVisible = false;
-            this.User.name =this.userInfo.name;
-            this.User.password = this.userInfo.password;
-            this.User.phone = this.userInfo.phone;
+      updateProfile () {
+        this.$refs.userInfo.validate((valid) => {
+          if (valid) {
+            this.profileDialogVisible = false
+            this.User.name = this.userInfo.name
+            this.User.password = this.userInfo.password
+            this.User.phone = this.userInfo.phone
             this.updateUser()
-          }else {
-            alert("Please fill the form correctly first")
+          } else {
+            alert('Please fill the form correctly first')
           }
         })
       }
-
       ,
+      cancelUser () {
+        let _this = this
+        let http = new XMLHttpRequest()
+        let path = App.path() + '/user/cancel'
+        http.open('POST', path, true)
+        http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        http.send(JSON.stringify(this.User))
+        http.onreadystatechange = function () {
+          if (http.readyState === 4 && http.status === 200) {
+           _this.$router.push('/')
+            alert('you have canceled successfully')
+          }
+        }
+
+      },
       handleChange (value) {
 
       },
 
-      updateAddress(){
+      updateAddress () {
         this.modifyDialogVisible = true
 
-          let address = {
-          name : this.modifyAddress.name,
+        let address = {
+          name: this.modifyAddress.name,
           phone: this.modifyAddress.phone,
           province: this.province,
           city: this.city,
           district: this.district,
           street: this.modifyAddress.street,
-        };
-        this.User.addresses.splice(this.modifyIndex,1,address)
-        this.modifyDialogVisible = false;
+        }
+        this.User.addresses.splice(this.modifyIndex, 1, address)
+        this.modifyDialogVisible = false
         this.modifyIndex = ''
-        this.updateUser();
+        this.updateUser()
 
       },
-      getUser() {
-        let email = localStorage.getItem("email")
-        let http = new XMLHttpRequest();
-        let path = App.path() + '/user/findUserByEmail?email='+email
+      getUser () {
+        let email = localStorage.getItem('email')
+        let http = new XMLHttpRequest()
+        let path = App.path() + '/user/findUserByEmail?email=' + email
         http.open('GET', path, true)
         http.send(null)
         http.onreadystatechange = function () {
           if (http.readyState === 4 && http.status === 200) {
             this.User = JSON.parse(http.responseText)
             console.log(http.responseText)
-            alert("log in")
           }
         }.bind(this)
       },
-      updateUser(){
-          let user = this.User;
-          let path = App.path() + '/user/update';
-          let http = new XMLHttpRequest()
+      updateUser () {
+        let user = this.User
+        let path = App.path() + '/user/update'
+        let http = new XMLHttpRequest()
 
-          http.open('POST',path,true);
-          http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-          http.send(JSON.stringify(user))
-        },
-      deleteRow(index, rows) {
+        http.open('POST', path, true)
+        http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        http.send(JSON.stringify(user))
+      },
+      deleteRow (index, rows) {
         rows.splice(index, 1)
         console.log(this.User)
         this.updateUser()
       },
 
-      updateRow(index, rows){
-        this.modifyAddress = rows;
+      updateRow (index, rows) {
+        this.modifyAddress = rows
         this.modifyIndex = index
         this.modifyDialogVisible = true
       },
-      addRow(){
+      addRow () {
         let address = {
-          name : this.newAddress.name,
+          name: this.newAddress.name,
           phone: this.newAddress.phone,
           province: this.province,
           city: this.city,
           district: this.district,
           street: this.newAddress.street
         }
-        this.newAddress={
+        this.newAddress = {
           phone: '',
-            name: '',
-            street: '',
+          name: '',
+          street: '',
         }
         this.selectedOptions = []
         this.newDialogVisible = false
         this.User.addresses.push(address)
-        this.updateUser();
+        this.updateUser()
       },
-
 
     },
 
@@ -316,11 +333,11 @@
 </script>
 
 <style scoped>
-  .el_card{
+  .el_card {
     margin: 10px;
     padding: 5px;
     width: 260px;
-    height:245px;
+    height: 245px;
     float: left;
     position: relative;
   }

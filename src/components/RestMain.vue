@@ -156,7 +156,6 @@
           city: '',
           district: '',
           street: '',
-          combos:[],
           dishes:[],
         },
         newRest:{

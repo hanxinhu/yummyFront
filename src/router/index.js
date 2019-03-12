@@ -7,7 +7,6 @@ import UserMain from '@/components/UserMain'
 import RestMain from '@/components/RestMain'
 import SelectRestaurant from '@/components/SelectRestaurant'
 import SelectDish from '@/components/SelectDish'
-import OrderGenerate from '@/components/OrderGenerate'
 import MyOrders from '@/components/MyOrders'
 import AdminLogin from '@/components/AdminLogin'
 import Admin from '@/components/Admin'
@@ -50,11 +49,7 @@ export default new Router({
       name:'SelectDish',
       component : SelectDish
     },
-    {
-      path:'/user/orderGenerate',
-      name:'OrderGenerate',
-      component : OrderGenerate
-    },
+
     {
       path:'/user/myOrders',
       name: 'MyOrders',

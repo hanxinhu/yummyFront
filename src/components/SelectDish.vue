@@ -2,7 +2,9 @@
   <el-container>
 
     <el-main>
-      <p>Hello World</p>
+      <el-select>
+
+      </el-select>
       <el-table :data="billItems">
         <el-table-column prop="name" label="Name"></el-table-column>
         <el-table-column prop="description" label="Description"></el-table-column>
@@ -49,30 +51,32 @@
         }
       },
       createOrder () {
-        let uid = localStorage.getItem('uid')
-        let rid = localStorage.getItem('rid')
-        const items = []
-        for (let i = 0; i < this.billItems.length; i++) {
-          if (this.billItems[i].number > 0) {
-            let item = billItems[i]
-            // delete  item.num
-            // delete  item.description
-            items.push(item)
-          }
-        }
-        this.bill.items = items
-        this.bill.uid = uid
-        this.bill.rid = rid
-        let http = new XMLHttpRequest()
-        let path = app.path() + '/bill/create'
-        http.open('POST', path, true)
-        http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-        http.send(JSON.stringify(this.bill))
-        http.onreadystatechange = function () {
-          if (http.readyState === 4 && http.status === 200) {
-               console.log(http.responseText)
-          }
-        }
+        localStorage.setItem("items",JSON.stringify(this.billItems))
+        this.$router.push("/user/orderGenerate")
+        // let uid = localStorage.getItem('uid')
+        // let rid = localStorage.getItem('rid')
+        // const items = []
+        // for (let i = 0; i < this.billItems.length; i++) {
+        //   if (this.billItems[i].number > 0) {
+        //     let item = billItems[i]
+        //     // delete  item.num
+        //     // delete  item.description
+        //     items.push(item)
+        //   }
+        // }
+        // this.bill.items = items
+        // this.bill.uid = uid
+        // this.bill.rid = rid
+        // let http = new XMLHttpRequest()
+        // let path = app.path() + '/bill/create'
+        // http.open('POST', path, true)
+        // http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+        // http.send(JSON.stringify(this.bill))
+        // http.onreadystatechange = function () {
+        //   if (http.readyState === 4 && http.status === 200) {
+        //        console.log(http.responseText)
+        //   }
+        // }
       }
 
     }
