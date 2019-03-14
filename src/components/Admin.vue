@@ -3,7 +3,7 @@
     <el-main>
       <p>approve restaurant for sign up</p>
       <el-table :data="restaurants" border style="width: 100%">
-        <el-table-column label="restaurant" prop="rid"></el-table-column>
+        <el-table-column label="restaurant" prop="id"></el-table-column>
         <el-table-column label="name" prop="name"></el-table-column>
         <el-table-column label="description" prop="description"></el-table-column>
         <el-table-column label="type" prop="type"></el-table-column>

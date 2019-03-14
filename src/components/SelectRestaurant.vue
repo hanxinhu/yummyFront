@@ -49,8 +49,8 @@
         }
       },
       select(row){
-        let rid = this.restaurants[row].rid
-        localStorage.setItem("restaurant",rid);
+        let id = this.restaurants[row].id
+        localStorage.setItem("restaurant",id);
         this.$router.push("/user/selectDish")
       }
 

@@ -68,7 +68,6 @@
             style="position: absolute; top: 200px;width: 1100px; left: 50%; margin-left: -550px; background-color: white; height: 500px">
             Dishes
             <el-button type="primary" @click="newDishDialog = true">Add Dish</el-button>
-            <el-button type="primary">Add Combo</el-button>
             <el-table :data="rest.dishes" border style="width: 100%">
               <el-table-column prop="id" label="ID" width="100">
               </el-table-column>
@@ -87,7 +86,7 @@
               <el-table-column label="Operation" width="170">
                 <template slot-scope="scope">
                   <el-button
-                    @click.native.prevent=""
+                    @click.native.prevent="deleteDish(scope.$index)"
                     type="text"
                     size="small">
                     DELETE
@@ -95,7 +94,21 @@
                 </template>
               </el-table-column>
             </el-table>
+            <el-button type="primary" @click="newComboDialog = true">Add Combo</el-button>
+            <el-table :data="rest.combos">
+              <el-table-column prop="name" label="Name">
+
+              </el-table-column>
+              <el-table-column prop="dish" label="Dishes">
+
+              </el-table-column>
+              <el-table-column prop="privilege" label="Privilege">
+              </el-table-column>
+              <el-table-column prop="start" label="Start Time"></el-table-column>
+              <el-table-column prop="end" label="End Time"></el-table-column>
+            </el-table>
           </div>
+
           <el-dialog title="New Dish" :visible.snyc="newDishDialog">
             <el-form :model="newDish">
               <el-form-item label="Name">
@@ -131,7 +144,40 @@
             <el-button type="text" @click="newDishDialog = false">Cancel</el-button>
             <el-button type="text" @click="addNewDish">Submit</el-button>
           </el-dialog>
+          <el-dialog title="New Combo" :visible.snyc="newComboDialog">
 
+            <el-input v-model="newCombo.name" placeholder="Name"></el-input>
+            <el-table :data="rest.dishes" @selection-change="handleSelectionChange">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
+              <el-table-column prop="id" label="ID"></el-table-column>
+              <el-table-column prop="name" label="Name" width="100">
+              </el-table-column>
+              <el-table-column prop="description" label="Description" width="200">
+              </el-table-column>
+              <el-table-column prop="price" label="Price" width="100">
+              </el-table-column>
+            </el-table>
+            <el-input-number :precision="2" label="privilege" v-model="newCombo.privilege"></el-input-number>
+
+            <el-date-picker
+              value-format="yyyy-MM-dd" placeholder="StartTime"
+              v-model="newCombo.start"
+              type="date"
+            >
+            </el-date-picker>
+            <el-date-picker
+              value-format="yyyy-MM-dd" placeholder="EndTime"
+              v-model="newCombo.end"
+              type="date"
+            >
+            </el-date-picker>
+            <el-button type="text" @click="newComboDialog = false">Cancel</el-button>
+            <el-button type="text" @click="addNewCombo">Submit</el-button>
+
+          </el-dialog>
         </div>
       </div>
     </div>
@@ -177,6 +223,7 @@
           district: '',
           street: '',
           dishes: [],
+          combos: [],
           updating: false,
         },
         newRest: {
@@ -195,8 +242,15 @@
           start: '',
           end: '',
           number: '',
-        }
-
+        },
+        newCombo: {
+          name: '',
+          dishes: [],
+          start: '',
+          end: '',
+          privilege: '',
+        },
+        newComboDialog: false
         ,
         updateProfileDialog: false,
         newDishDialog: false,
@@ -204,11 +258,17 @@
         options: regionData,
         selectedOptions: [],
         start: '',
-        end:'',
+        end: '',
+        multipleSelection: [],
       }
     },
     methods: {
+      handleSelectionChange (val) {
+        this.multipleSelection = val
+        console.log(val)
+      },
       getRest () {
+
         let id = localStorage.getItem('id')
         let http = new XMLHttpRequest()
         let path = app.path() + '/restaurant/findByID?ID=' + id
@@ -218,7 +278,20 @@
         http.onreadystatechange = function () {
           if (http.status === 200 && http.readyState === 4) {
             _this.rest = JSON.parse(http.responseText)
+            for (var i = 0; i < _this.rest.combos.length; i++) {
+              var dish = ''
+              for (var j = 0; j < _this.rest.combos[i].dishes.length; j++) {
+                if (j === _this.rest.combos[i].dishes.length - 1) {
+                  dish += _this.rest.combos[i].dishes[j] + ' '
+                } else {
+                  dish += _this.rest.combos[i].dishes[j] + ','
+                }
+
+              }
+              _this.rest.combos[i].dish = dish
+            }
           }
+
         }
       },
       newInfoUpdate () {
@@ -254,6 +327,25 @@
         this.newDish.end = this.end
         this.rest.dishes.push(this.newDish)
         this.newDishDialog = false
+        this.newDish = {}
+        this.updateRestaurant()
+      },
+      addNewCombo () {
+        this.newComboDialog = false
+        let dishes = []
+        for (let i = 0; i < this.multipleSelection.length; i++) {
+          dishes.push(this.multipleSelection[i].id)
+        }
+        this.newCombo.dishes = dishes
+        this.rest.combos.push(this.newCombo)
+        this.updateRestaurant()
+      },
+      deleteDish (row) {
+        this.rest.dishes.splice(row, 1)
+        this.updateRestaurant()
+      },
+      updateRestaurant () {
+        let _this = this
         let restaurant = this.rest
         let http = new XMLHttpRequest()
         let path = app.path() + '/restaurant/update'
@@ -262,7 +354,7 @@
         http.send(JSON.stringify(restaurant))
         http.onreadystatechange = function () {
           if (http.status === 200 && http.readyState === 4) {
-            alert('success')
+            _this.getRest()
           }
         }
       },

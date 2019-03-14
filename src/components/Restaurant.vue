@@ -142,6 +142,7 @@
                 let result = JSON.parse(http.responseText)
                 if (result === 'SUCCESS') {
                   localStorage.setItem('id',ID);
+                  console.log(ID)
                   _this.$router.push('/restaurant/main')
                 }
                 alert(result)

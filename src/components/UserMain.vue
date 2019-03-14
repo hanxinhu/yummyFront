@@ -33,7 +33,9 @@
             <el-button id="edit_name" style="position: absolute; top: 30px; right: 50px" icon="el-icon-edit-outline"
                        type="text" @click="profileDialogVisible = true">Edit Profile
             </el-button>
-            <el-button style="position: absolute; top: 130px; right: 50px;" type="danger" @click="cancelUser">Cancel User</el-button>
+            <el-button style="position: absolute; top: 130px; right: 50px;" type="danger" @click="cancelUser">Cancel
+              User
+            </el-button>
           </div>
         </div>
         <el-dialog title="Update Profile" :visible.sync="profileDialogVisible">
@@ -140,7 +142,8 @@
           </el-table>
         </div>
 
-        <el-button type="primary" style="position: absolute; top: 700px; left: 50%;"> Start Order</el-button>
+        <el-button type="primary" style="position: absolute; top: 700px; left: 50%;" @click="startOrder"> Start Order
+        </el-button>
       </div>
     </div>
 
@@ -223,6 +226,9 @@
       }
     },
     methods: {
+      startOrder () {
+        this.$router.push('/user/selectRestaurant')
+      },
       updateProfile () {
         this.$refs.userInfo.validate((valid) => {
           if (valid) {
@@ -246,7 +252,7 @@
         http.send(JSON.stringify(this.User))
         http.onreadystatechange = function () {
           if (http.readyState === 4 && http.status === 200) {
-           _this.$router.push('/')
+            _this.$router.push('/')
             alert('you have canceled successfully')
           }
         }
