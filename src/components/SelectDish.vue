@@ -10,7 +10,6 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
-              :disabled="!item.disabled"
             >
             </el-option>
           </el-select>
@@ -55,7 +54,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button>Submit</el-button>
+          <el-button type="primary" @click="createBill">Submit</el-button>
         </el-form-item>
       </el-form>
 
@@ -151,13 +150,12 @@
         let restaurantID = localStorage.getItem('restaurant')
         let http = new XMLHttpRequest()
         let path = app.path() + '/restaurant/findByID?ID=' + restaurantID
-        http.open('GET', path)
+        http.open('GET', path, true)
         http.send(null)
         let _this = this
         http.onreadystatechange = function () {
           if (http.readyState === 4 && http.status === 200) {
             _this.restaurant = JSON.parse(http.responseText)
-            console.log(_this.restaurant.combos[0])
 
             for (let i = 0; i < _this.restaurant.dishes.length; i++) {
               let dish = _this.restaurant.dishes[i]
@@ -184,7 +182,8 @@
         http.onreadystatechange = function () {
           if (http.readyState === 4 && http.status === 200) {
             this.user = JSON.parse(http.responseText)
-            let user = this.user
+            console.log(this.user.addresses)
+            console.log(this.restaurant)
             for (let i = 0; i < this.user.addresses.length; i++) {
               let address = this.user.addresses[i]
               let label = 'Phone : ' + address.phone + 'Name : ' + address.name + 'Address: ' + address.province + address.city + address.district + address.street
@@ -192,7 +191,6 @@
               let option = {
                 label: label,
                 value: value,
-                disabled: user.province === address.province && user.city === address.city && user.district === address.district
               }
               this.options.push(option)
             }
@@ -203,41 +201,57 @@
         //检查账户余额
         let pay = this.moneyToPay
         let balance = this.user.balance
-        if (pay < balance) {
-          alert('you don\'t have enough')
+        if (pay > balance) {
+          alert('you don\'t have enough money')
+          return
+        }
+        let address = this.user.addresses[this.address]
+
+        let deliverable = this.restaurant.province === address.province && this.restaurant.city === address.city && this.restaurant.district === address.district
+        if (!deliverable) {
+          alert('unreachable')
+          return
         }
         //检查库存
         //创建订单
         let http = new XMLHttpRequest()
         let path = app.path() + '/bill/create'
         let rid = localStorage.getItem('id')
-        let address = this.user.addresses[this.address]
+        let uid = localStorage.getItem('uid')
         let items = []
         for (let i = 0; i < this.billItems.length; i++) {
           if (this.billItems[i].num > 0) {
             items.push(this.billItems[i])
           }
         }
+        let privilege = this.privilege()
+        let discount = this.discount
+        let sum = this.sum
+        let moneyToPay = this.moneyToPay
         let bill = {
           rid: rid,
-          uid: this.user.id,
+          uid: uid,
           province: address.province,
           city: address.city,
           district: address.district,
+          street: address.street,
           phone: address.phone,
           name: address.name,
-          billItems: items,
-          privilege: this.privilege,
-          discount: this.discount,
-          sum: this.sum,
-          moneyToPay: this.moneyToPay,
+          items: items,
+          privilege: privilege,
+          discount: discount,
+          sum: sum,
+          moneyToPay: moneyToPay,
         }
-        http.open('POST', path)
+        console.log(bill)
+        http.open('POST', path, true)
         http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         http.send(JSON.stringify(bill))
+        console.log()
+        let _this = this
         http.onreadystatechange = function () {
           if (http.status === 200 && http.readyState === 4) {
-            alert('success')
+            _this.$router.push('/user/myOrders')
           }
         }
       }

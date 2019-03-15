@@ -79,6 +79,9 @@
               </el-table-column>
               <el-table-column prop="number" label="Number" width="100">
               </el-table-column>
+              <el-table-column prop="sales" label="Sale">
+
+              </el-table-column>
               <el-table-column prop="start" label="Start">
               </el-table-column>
               <el-table-column prop="end" label="End">

@@ -144,7 +144,11 @@
 
         <el-button type="primary" style="position: absolute; top: 700px; left: 50%;" @click="startOrder"> Start Order
         </el-button>
+        <el-button type="primary" style="position: absolute; top: 750px; left: 50%;" @click="gotoMyOrders">My Orders
+        </el-button>
+
       </div>
+
     </div>
 
   </el-main>
@@ -160,6 +164,7 @@
     name: 'UserMain',
     created () {
       this.getUser()
+
     },
     computed: {
       province: function () {
@@ -331,6 +336,11 @@
         this.User.addresses.push(address)
         this.updateUser()
       },
+      gotoMyOrders () {
+        localStorage.setItem('uid', this.User.uid)
+        this.$router.push('/user/myOrders')
+      },
+
 
     },
 
