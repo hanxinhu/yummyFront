@@ -220,6 +220,12 @@
         http.open('POST', address, true)
         http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         http.send(JSON.stringify(this.settlements))
+        let _this = this
+        http.onreadystatechange = function () {
+          if (http.readyState === 4 && http.status === 200) {
+            _this.getBalance()
+          }
+        }
       },
       settle (row) {
         this.settlements[row].settled = true
@@ -229,6 +235,12 @@
         http.setRequestHeader('Content-type', 'application/json; charset=utf-8')
         http.send(JSON.stringify(this.settlements[row]))
         this.openSuccess()
+        let _this = this
+        http.onreadystatechange = function () {
+          if (http.readyState === 4 && http.status === 200) {
+            _this.getBalance()
+          }
+        }
       },
       openSuccess () {
         this.$notify({
