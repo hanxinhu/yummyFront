@@ -109,7 +109,7 @@
         return row[property] === value
       },
       returnMainPage () {
-        this.$router.push('/user/main')
+        this.$router.push('/restaurant/main')
 
       }
     }

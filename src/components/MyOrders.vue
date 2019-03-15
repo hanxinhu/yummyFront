@@ -4,24 +4,28 @@
       <el-button type="text" @click="gotoMainPage">return main page</el-button>
       <p>Bills</p>
 
-      <el-table :data="bills">
-        <el-table-column prop="rid" label="restaurant">
+      <el-table :data="bills" ref="bills" show-summary>
+        <el-table-column prop="rid" label="restaurant" sortable
+                         :filters="restaurantFilters"
+                         :filter-method="filterHandler">
         </el-table-column>
 
-        <el-table-column prop="createTime" label="CreatedTime">
+        <el-table-column prop="createTime" label="CreatedTime" sortable>
         </el-table-column>
-        <el-table-column prop="payTime" label="PayTime">
+        <el-table-column prop="payTime" label="PayTime" sortable>
 
         </el-table-column>
-        <el-table-column prop="receiveTime" label="receiveTime">
+        <el-table-column prop="receiveTime" label="receiveTime" sortable>
 
         </el-table-column>
-        <el-table-column prop="moneyToPay" label="MoneyToPay">
+        <el-table-column prop="moneyToPay" label="MoneyToPay" sortable>
         </el-table-column>
-        <el-table-column prop="state" label="State">
+        <el-table-column prop="state" label="State" sortable
+                         column-key="state"
+                         :filters="[{text:'unpaid',value:'unpaid'},{text:'paid',value:'paid'},{text:'canceled',value:'canceled'},{text:'received',value:'received'}]"
+                         :filter-method="filterHandler">
         </el-table-column>
-        <el-table-column prop="address" label="address">
-
+        <el-table-column prop="address" label="address" sortable>
         </el-table-column>
         <el-table-column label="options">
           <template scope="scope">
@@ -58,6 +62,7 @@
         paid: 'paid',
         canceled: 'canceled',
         received: 'received',
+        restaurantFilters: [],
       }
     },
     methods: {
@@ -74,9 +79,21 @@
         http.onreadystatechange = function () {
           if (http.status === 200 && http.readyState === 4) {
             _this.bills = JSON.parse(http.responseText)
+            let restaurants = []
             for (let i = 0; i < _this.bills.length; i++) {
               let bill = _this.bills[i]
+              restaurants.push(bill.rid)
               bill.address = bill.province + bill.city + bill.district + bill.street
+            }
+            const removeDuplicateItems = arr => [...new Set(arr)]
+
+            restaurants = removeDuplicateItems(restaurants)
+            console.log(users)
+            for (let i = 0; i < restaurants.length; i++) {
+              _this.restaurantFilters.push({
+                text: restaurants[i],
+                value: restaurants[i],
+              })
             }
           }
         }
@@ -151,7 +168,14 @@
           }
         }
 
-      }
+      },
+      clearFilter () {
+        this.$refs.bills.clearFilter()
+      },
+      filterHandler (value, row, column) {
+        const property = column['property']
+        return row[property] === value
+      },
     }
   }
 </script>

@@ -46,7 +46,7 @@
         <el-form-item label="discount">
           {{discount}}
         </el-form-item>
-        <el-form-item label="Privilege">
+        <el-form-item label="Combo Privilege">
           {{privilege()}}
         </el-form-item>
         <el-form-item label="MoneyToPay">

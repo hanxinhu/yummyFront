@@ -65,7 +65,7 @@
           <el-table-column label="restaurant" prop="rid"></el-table-column>
           <el-table-column label="bill" prop="id"></el-table-column>
           <el-table-column label="time" prop="receiveTime"></el-table-column>
-          <el-table-column label="sum" prop="sum"></el-table-column>
+          <el-table-column label="sum" prop="moneyToPay"></el-table-column>
           <el-table-column label="options">
             <template slot-scope="scope">
               <el-button @click.native.prevent="settle(scope.$index)" type="text">settle account</el-button>
@@ -811,8 +811,9 @@
       },
       drawBalanceChange () {
         var myChart = echarts.init(document.getElementById('balanceChange'))
-        var dateList = ['2019-01-02', '2019-01-02']
-        var valueList = ['10', '20']
+        var dateList = ['2019-03-19', '2019-03-10', '2019-03-11', '2019-03-12', '2019-03-13', '2019-03-14', '2019-03-15',]
+
+        var valueList = ['1012', '2131', '3131', '4321', '5123', '6984', '7899']
 
         var option = {
           // Make gradient line here
@@ -826,7 +827,7 @@
           title: [{
             top: '5%',
             left: 'center',
-            text: 'new Restaurant'
+            text: 'Sum Balance'
           },],
           tooltip: {
             trigger: 'axis'

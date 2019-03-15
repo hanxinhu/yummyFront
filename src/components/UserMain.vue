@@ -41,13 +41,13 @@
         <el-dialog title="Update Profile" :visible.sync="profileDialogVisible">
           <el-form :model="userInfo" ref="userInfo">
             <el-form-item prop="name">
-              <el-input placeholder="New name"></el-input>
+              <el-input v-model="userInfo.name" placeholder="New name"></el-input>
             </el-form-item>
             <el-form-item prop="phone">
-              <el-input placeholder="New phone"></el-input>
+              <el-input v-model="userInfo.phone" placeholder="New phone"></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password" placeholder="New password"></el-input>
+              <el-input v-model="userInfo.password" type="password" placeholder="New password"></el-input>
             </el-form-item>
             <el-form-item>
               <span>
@@ -340,7 +340,6 @@
         localStorage.setItem('uid', this.User.uid)
         this.$router.push('/user/myOrders')
       },
-
 
     },
 

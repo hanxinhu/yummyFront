@@ -30,6 +30,10 @@
               <el-button type="primary" :disabled='rest.updating' @click="updateProfileDialog = true">Edit Profile
               </el-button>
               <el-button v-show=updating type="text">your update is waiting</el-button>
+              <el-button @click="gotoStat" type="primary">restaurant stat</el-button>
+
+            </div>
+            <div>
             </div>
           </div>
 
@@ -266,6 +270,9 @@
       }
     },
     methods: {
+      gotoStat () {
+        this.$router.push('/restaurant/stat')
+      },
       handleSelectionChange (val) {
         this.multipleSelection = val
         console.log(val)
